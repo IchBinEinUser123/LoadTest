@@ -1,11 +1,11 @@
 # FQDN with protocol
-FQDN_WITH_PROTO = "https://ssnmgc-dev1.outsystemsenterprise.com"
+FQDN_WITH_PROTO = "https://ssnmgc-tst1.outsystemsenterprise.com"
 
 # module name
 MODULE_NAME = "SHPPOC"
 
 # DB Metadata
-MIN_FALL_COUNT_PER_EDIS = 32
+MIN_FALL_COUNT_PER_EDIS = 400
 MIN_AUFGABEN_PER_FALL = 10
 
 # Probabilities (0 - 100)

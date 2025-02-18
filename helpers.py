@@ -44,7 +44,10 @@ def get_random_sachbearbeiter_id(self):
 
 
 def get_random_user_id():
-    return str(random.randint(2, 29))
+    if "dev" in FQDN_WITH_PROTO:
+        return str(random.randint(2, 29))
+    else:
+        return str(random.randint(29, 588))
 
 
 # random texts
