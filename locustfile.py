@@ -96,7 +96,8 @@ class Sachbearbeiter(HttpUserWithResources):
 
     @task
     def fall_abrechnen(self):
-        fall_details.fall_abrechnen(self)
+        if ALLOW_BLOCKING_ACTIONS:
+            fall_details.fall_abrechnen(self)
 
     @task
     def fall_begleiten(self):
@@ -104,7 +105,8 @@ class Sachbearbeiter(HttpUserWithResources):
 
     @task
     def fall_als_pdf_exportieren(self):
-        fall_details.fall_als_pdf_exportieren(self)
+        if ALLOW_BLOCKING_ACTIONS:
+            fall_details.fall_als_pdf_exportieren(self)
 
     @task
     def fall_anlagen_exportieren(self):

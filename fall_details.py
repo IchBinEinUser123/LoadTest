@@ -277,6 +277,9 @@ def fall_bearbeitung_starten(self):
     load_data_actions(self)
 
 
+# TODO Fall Bescheiden
+# TODO Einzelne Anlage herunterladen
+
 def fall_abrechnen(self):
     # set action specific values
     action_name = "FallAbrechnen"
