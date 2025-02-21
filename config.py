@@ -5,14 +5,14 @@ FQDN_WITH_PROTO = "https://ssnmgc-tst1.outsystemsenterprise.com"
 MODULE_NAME = "SHPPOC"
 
 # if blocking actions (e.g. PDF generation) are allowed
-ALLOW_BLOCKING_ACTIONS = False
+ALLOW_BLOCKING_ACTIONS = True
 
 # DB Metadata
-MIN_FALL_COUNT_PER_EDIS = 400
+MIN_FALL_COUNT_PER_EDIS = 200
 MIN_AUFGABEN_PER_FALL = 10
 
 # Probabilities (0 - 100)
-UPLOAD_PROBABILITY = 0
+UPLOAD_PROBABILITY = 10
 DOWNLOAD_PROBABILITY = 0
 SEARCH_PROBABILITY = 50
 

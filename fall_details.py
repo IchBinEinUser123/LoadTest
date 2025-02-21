@@ -277,8 +277,30 @@ def fall_bearbeitung_starten(self):
     load_data_actions(self)
 
 
-# TODO Fall Bescheiden
-# TODO Einzelne Anlage herunterladen
+def fall_bescheiden(self):
+    # set action specific values
+    action_name = "FallBescheiden"
+    action_path = f"/screenservices/SHPPOC/Popups/FallBescheiden_Popup/Action{action_name}"
+
+    with self.client.get(f"/scripts/{MODULE_NAME}.Popups.FallBescheiden_Popup.mvc.js", headers=self.client.headers,
+                         catch_response=True, name=f"/{SCREEN_NAME}_resources") as response:
+        payload = {
+            "versionInfo":
+                {"moduleVersion": self.client.module_version,
+                 "apiVersion": get_api_key_from_script(response.text, action_name, action_path[1:])
+                 },
+            "viewName": f"{UI_FLOW}.{SCREEN_NAME}",
+            "inputParameters": {
+                "FallId": self.client.fall_id,
+                "Bescheid_PDF": get_bescheid_document()
+            }
+        }
+
+        self.client.post(action_path, json=payload, headers=self.client.headers, name=f"/{SCREEN_NAME}")
+
+    # we reload all screen data afterwards
+    load_data_actions(self)
+
 
 def fall_abrechnen(self):
     # set action specific values
@@ -294,9 +316,9 @@ def fall_abrechnen(self):
                  },
             "viewName": f"{UI_FLOW}.{SCREEN_NAME}",
             "inputParameters": {
-                "Betrag": "42",
                 "Date": "2025-02-18",
-                "FallId": self.client.fall_id
+                "FallId": self.client.fall_id,
+                "Abrechnung_PDF": get_abrechnung_document()
             }
         }
 
@@ -333,7 +355,7 @@ def fall_begleiten(self):
 
 def fall_als_pdf_exportieren(self):
     # set action specific values
-    action_name = "GenerateAndSaveFallPDF"
+    action_name = "AttachDocsToFall"
     action_path = f"/screenservices/SHPPOC/MainFlow/FallDetail/Action{action_name}"
 
     with self.client.get(f"/scripts/{MODULE_NAME}.{UI_FLOW}.{SCREEN_NAME}.mvc.js", headers=self.client.headers,
@@ -370,7 +392,8 @@ def fall_anlagen_exportieren(self):
                  },
             "viewName": f"{UI_FLOW}.{SCREEN_NAME}",
             "inputParameters": {
-                "FallId": self.client.fall_id
+                "FallId": self.client.fall_id,
+                "List_Dokumente": {"List": [get_falldaten_document()]}
             }
         }
 
@@ -398,9 +421,3 @@ def fall_weiterleiten(self, hinweis):
         }
 
         self.client.post(action_path, json=payload, headers=self.client.headers, name=f"/{SCREEN_NAME}")
-
-
-
-
-
-

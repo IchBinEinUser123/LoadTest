@@ -20,7 +20,7 @@ class Sachbearbeiter(HttpUserWithResources):
     wait_time = between(MIN_WAIT_TIME, MAX_WAIT_TIME)
     fall_id = 0
 
-    @task
+    @task(6)
     def visit_fall_details(self):
         self.client.get(f"/FallDetail?DestinationIndex=2&FallId={self.client.fall_id}", headers=self.client.headers,
                         name="/FallDetail")
@@ -95,9 +95,12 @@ class Sachbearbeiter(HttpUserWithResources):
         fall_details.fall_beenden(self)
 
     @task
+    def fall_bescheiden(self):
+        fall_details.fall_bescheiden(self)
+
+    @task
     def fall_abrechnen(self):
-        if ALLOW_BLOCKING_ACTIONS:
-            fall_details.fall_abrechnen(self)
+        fall_details.fall_abrechnen(self)
 
     @task
     def fall_begleiten(self):
@@ -105,8 +108,7 @@ class Sachbearbeiter(HttpUserWithResources):
 
     @task
     def fall_als_pdf_exportieren(self):
-        if ALLOW_BLOCKING_ACTIONS:
-            fall_details.fall_als_pdf_exportieren(self)
+        fall_details.fall_als_pdf_exportieren(self)
 
     @task
     def fall_anlagen_exportieren(self):

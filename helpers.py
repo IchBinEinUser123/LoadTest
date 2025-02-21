@@ -2,7 +2,7 @@ import random
 import re
 import logging
 from config import *
-from resources import PDF_FILE
+from resources import PDF_FILE, PDF_BESCHEID, PDF_ABRECHNUNG, PDF_FALLDATEN
 
 
 def debug_log(response):
@@ -34,9 +34,35 @@ def random_choice_document():
     if random.randint(1, 100) > UPLOAD_PROBABILITY:
         return None
     else:
-        return {"DokumentId": "0",
-                "FileName": "Alice_in_Wonderland.pdf",
-                "FileBinary": PDF_FILE}
+        return {
+            "DokumentId": "0",
+            "FileName": "Alice_in_Wonderland.pdf",
+            "FileBinary": PDF_FILE
+        }
+
+
+def get_bescheid_document():
+    return {
+        "DokumentId": "0",
+        "FileName": "Bescheid.pdf",
+        "FileBinary": PDF_BESCHEID
+    }
+
+
+def get_abrechnung_document():
+    return {
+        "DokumentId": "0",
+        "FileName": "Abrechnung.pdf",
+        "FileBinary": PDF_ABRECHNUNG
+    }
+
+
+def get_falldaten_document():
+    return {
+        "DokumentId": "0",
+        "FileName": "Falldaten.pdf",
+        "FileBinary": PDF_FALLDATEN
+    }
 
 
 def get_random_sachbearbeiter_id(self):
