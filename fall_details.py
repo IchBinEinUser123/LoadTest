@@ -15,7 +15,11 @@ SCRIPT_SOURCES = [
     "CW.AufgabenDetails",
     "CW.AnlagenDetails",
     "CW.GespraechDetails",
-    "CW.BegleitungDetails"
+    "CW.BegleitungDetails",
+    "PDF_CW.BegleitungList",
+    "PDF_CW.GespraechList",
+    "PDF_CW.AufgabenList",
+    "PDF_CW.AnlagenList"
 ]
 
 
