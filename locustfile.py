@@ -138,13 +138,95 @@ class Sachbearbeiter(HttpUserWithResources):
         """
         fall_details.fall_bearbeitung_starten(self)
 
+    @task(2)
+    def fall_sachbearbeiter_aendern(self):
+        """
+        Changes the assigned caseworker for a case.
+        :param self: The HttpUser object
+        :return:
+        """
+        fall_details.fall_sachbearbeiter_aendern(self)
+
+    @task(3)
+    def fall_beenden(self):
+        """
+        Ends a case.
+        :param self: The HttpUser object
+        :return:
+        """
+        fall_details.fall_beenden(self)
+
+    @task(3)
+    def fall_bescheiden(self):
+        """
+        Decides a case.
+        :param self: The HttpUser object
+        :return:
+        """
+        fall_details.fall_bescheiden(self)
+
+    @task(3)
+    def fall_abrechnen(self):
+        """
+        Processes payment for a case.
+        :param self: The HttpUser object
+        :return:
+        """
+        fall_details.fall_abrechnen(self)
+
+    @task(3)
+    def fall_begleiten(self):
+        """
+        Starts attendance of a case.
+        :param self: The HttpUser object
+        :return:
+        """
+        fall_details.fall_begleiten(self)
+
+    @task
+    def fall_als_pdf_exportieren(self):
+        """
+        Downloads case as a PDF.
+        :param self: The HttpUser object
+        :return:
+        """
+        fall_details.fall_als_pdf_exportieren(self)
+
+    @task
+    def fall_anlagen_exportieren(self):
+        """
+        Downloads case attachments as zip.
+        :param self: The HttpUser object
+        :return:
+        """
+        fall_details.fall_anlagen_exportieren(self)
+
+    @task
+    def fall_weiterleiten(self):
+        """
+        Redirects a case to a different EDIS.
+        :param self: The HttpUser object
+        :return:
+        """
+        fall_details.fall_weiterleiten(self, hinweis=get_random_text())
+        time.sleep(MIN_WAIT_TIME)
+        # get new id values, because Fall no longer belongs to current EDIS
+        self.visit_alle_faelle()
+        time.sleep(MIN_WAIT_TIME)
+        self.visit_fall_details()
+        time.sleep(MIN_WAIT_TIME)
+
+
     def on_start(self):
         """
         Performs login and initializes relevant values.
         :param self: The HttpUser object
         :return:
         """
+        # login and set headers
         login_user(self)
+
+        # initialize relevant values, i.e. Sachbearbeiter list, FallId, AufgabeId
         self.visit_alle_faelle()
         time.sleep(MIN_WAIT_TIME)
         self.visit_fall_details()

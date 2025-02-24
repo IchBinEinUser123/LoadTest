@@ -56,23 +56,24 @@ def load_data_actions(self):
     :param self: The HttpUser object
     :return: None
     """
-    for script in SCRIPT_SOURCES:
-        with self.client.get(f"/scripts/{MODULE_NAME}.{script}.mvc.js", headers=self.client.headers,
-                             catch_response=True, name=f"/{SCREEN_NAME}_resources") as response:
+    # Since only one tab can be open and hence only its data is being loaded, we randomly choose a tab each time
+    script = random.choice(SCRIPT_SOURCES)
+    with self.client.get(f"/scripts/{MODULE_NAME}.{script}.mvc.js", headers=self.client.headers,
+                         catch_response=True, name=f"/{SCREEN_NAME}_resources") as response:
 
-            # Find all matches
-            matches = re.findall(DATA_ACTION_PATTERN, response.text)
+        # Find all matches
+        matches = re.findall(DATA_ACTION_PATTERN, response.text)
 
-            # Print extracted values
-            for match in matches:
-                _, endpoint, endpoint_url, api_version = match
-                with self.client.post("/" + endpoint_url, json=get_payload(self, api_version),
-                                      headers=self.client.headers, name=f"/{SCREEN_NAME}") as inner_response:
-                    if "SetGetAufgabesByFallId" in endpoint:
-                        # select new Fall
-                        inner_matches = re.findall(r'"Aufgabe":\{"Id":"(\d+)"', inner_response.text)
-                        if inner_matches:
-                            self.client.aufgabe_id = random.choice(inner_matches)
+        # Print extracted values
+        for match in matches:
+            _, endpoint, endpoint_url, api_version = match
+            with self.client.post("/" + endpoint_url, json=get_payload(self, api_version),
+                                  headers=self.client.headers, name=f"/{SCREEN_NAME}") as inner_response:
+                if "SetGetAufgabesByFallId" in endpoint:
+                    # select new Aufgabe
+                    inner_matches = re.findall(r'"Aufgabe":\{"Id":"(\d+)"', inner_response.text)
+                    if inner_matches:
+                        self.client.aufgabe_id = random.choice(inner_matches)
 
 
 def aufgabe_erfassen(self, aufgabe_id, titel, beschreibung, datum):

@@ -11,6 +11,7 @@ from resources import DATA_ACTION_PATTERN
 UI_FLOW = "MainFlow"  # Name of the parent UI-Flow in Outsystems
 SCREEN_NAME = "MeinBereich"  # Name of the screen in Outsystems
 
+
 # List of script sources containing references to aggregates or data actions
 SCRIPT_SOURCES = [
     f"{UI_FLOW}.{SCREEN_NAME}",
