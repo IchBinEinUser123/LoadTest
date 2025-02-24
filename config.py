@@ -5,7 +5,7 @@ FQDN_WITH_PROTO = "REPLACE_ME"
 MODULE_NAME = "SHPPOC"
 
 # DB Metadata (Just for integrity reasons)
-MIN_FALL_COUNT_PER_EDIS = 1000
+MIN_FALL_COUNT_PER_EDIS = 5000
 MIN_AUFGABEN_PER_FALL = 10
 
 # Probabilities (0 - 100)
