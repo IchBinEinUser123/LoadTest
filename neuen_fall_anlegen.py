@@ -18,6 +18,12 @@ SCRIPT_SOURCES = [
 
 
 def get_payload(self, api_version):
+    """
+    Generates the payload for the FallFormSubmit request with API versioning.
+    :param self: The instance calling the function (likely related to the client making the request)
+    :param api_version: The API version for which the payload is being generated
+    :return: Dictionary containing the payload with version info and screen data
+    """
     return {
         "versionInfo": {
             "moduleVersion": self.client.module_version,
@@ -32,6 +38,12 @@ def get_payload(self, api_version):
 
 
 def load_data_actions(self):
+    """
+    Loads the data actions from the defined script sources, and sends POST requests with the generated payload.
+    This function checks all scripts for references to data actions, and sends them to the API.
+    :param self: The instance calling the function (likely related to the client making the request)
+    :return None
+    """
     for script in SCRIPT_SOURCES:
         with self.client.get(f"/scripts/{MODULE_NAME}.{script}.mvc.js", headers=self.client.headers,
                              catch_response=True, name=f"/{SCREEN_NAME}_resources") as response:
@@ -46,6 +58,12 @@ def load_data_actions(self):
 
 
 def fall_erstellen(self):
+    """
+    Creates a new case (Fall) by sending a POST request with the appropriate payload.
+    This function performs the action of creating a new case with predefined values.
+    :param self: The instance calling the function (likely related to the client making the request)
+    :return None
+    """
     with self.client.get(f"/scripts/{MODULE_NAME}.CW.FallDisplay.mvc.js", headers=self.client.headers,
                          catch_response=True, name=f"/{SCREEN_NAME}_resources") as response:
         api_version = get_api_key_from_script(response.text, "FallFormSubmit",

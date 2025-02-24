@@ -19,6 +19,11 @@ USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 
 
 def login_user(self):
+    """
+    Handles User Login, extracts CSRF-Token etc. and updates relevant HTTP headers in client.headers
+    :param self: The HttpUser object
+    :return:
+    """
     # set default headers
     self.client.headers = {
         "User-Agent": USER_AGENT,

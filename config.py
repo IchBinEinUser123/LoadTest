@@ -1,21 +1,17 @@
 # FQDN with protocol
-FQDN_WITH_PROTO = "https://ssnmgc-tst1.outsystemsenterprise.com"
+FQDN_WITH_PROTO = "REPLACE_ME"
 
 # module name
 MODULE_NAME = "SHPPOC"
 
-# if blocking actions (e.g. PDF generation) are allowed
-ALLOW_BLOCKING_ACTIONS = True
-
-# DB Metadata
+# DB Metadata (Just for integrity reasons)
 MIN_FALL_COUNT_PER_EDIS = 1000
 MIN_AUFGABEN_PER_FALL = 10
 
 # Probabilities (0 - 100)
-UPLOAD_PROBABILITY = 33
-DOWNLOAD_PROBABILITY = 0
-SEARCH_PROBABILITY = 50
+UPLOAD_PROBABILITY = 10 # probability that SB attaches a file to Fall/Gespraech/Begleitung
+SEARCH_PROBABILITY = 33 # probability that SB uses the search input (i.e. triggers additional server requests)
 
 # Thresholds
-MIN_WAIT_TIME = 5   # seconds
+MIN_WAIT_TIME = 10  # seconds
 MAX_WAIT_TIME = 60  # seconds

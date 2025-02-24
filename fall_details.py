@@ -20,11 +20,12 @@ SCRIPT_SOURCES = [
 
 
 def get_payload(self, api_version: str):
-    """ TODO Define all screen variables, which are relevant for aggregate filters
+    """
+    Generates the payload for API requests specific to screen variables and aggregate filters.
 
-    :param self:
-    :param api_version:
-    :return:
+    :param self: The HttpUser object
+    :param api_version: The API version to be used in the request
+    :return: Dictionary containing the request payload with screen variables and API version info
     """
     start_index = 0
     return {
@@ -49,6 +50,12 @@ def get_payload(self, api_version: str):
 
 
 def load_data_actions(self):
+    """
+    Loads all data actions from the script sources and processes them.
+
+    :param self: The HttpUser object
+    :return: None
+    """
     for script in SCRIPT_SOURCES:
         with self.client.get(f"/scripts/{MODULE_NAME}.{script}.mvc.js", headers=self.client.headers,
                              catch_response=True, name=f"/{SCREEN_NAME}_resources") as response:
@@ -60,7 +67,7 @@ def load_data_actions(self):
             for match in matches:
                 _, endpoint, endpoint_url, api_version = match
                 with self.client.post("/" + endpoint_url, json=get_payload(self, api_version),
-                                 headers=self.client.headers, name=f"/{SCREEN_NAME}") as inner_response:
+                                      headers=self.client.headers, name=f"/{SCREEN_NAME}") as inner_response:
                     if "SetGetAufgabesByFallId" in endpoint:
                         # select new Fall
                         inner_matches = re.findall(r'"Aufgabe":\{"Id":"(\d+)"', inner_response.text)
@@ -69,6 +76,16 @@ def load_data_actions(self):
 
 
 def aufgabe_erfassen(self, aufgabe_id, titel, beschreibung, datum):
+    """
+    Captures a new task (Aufgabe) or edits an existing one.
+
+    :param self: The HttpUser object
+    :param aufgabe_id: The task ID
+    :param titel: The title of the task
+    :param beschreibung: The description of the task
+    :param datum: The due date for the task
+    :return: None
+    """
     # set action specific values
     action_name = "AufgabeErfassenOrBearbeiten"
     action_path = f"/screenservices/SHPPOC/Popups/Aufgabe_Popup/Action{action_name}"
@@ -95,6 +112,16 @@ def aufgabe_erfassen(self, aufgabe_id, titel, beschreibung, datum):
 
 
 def gespraech_dokumentieren(self, gespraech_id, titel, beschreibung, datum):
+    """
+    Documents a conversation (Gespräch) with an optional file upload.
+
+    :param self: The HttpUser object
+    :param gespraech_id: The conversation ID
+    :param titel: The title of the conversation
+    :param beschreibung: The description of the conversation
+    :param datum: The date of the conversation
+    :return: None
+    """
     # set action specific values
     action_name = "Beratungsgespraech_ErfassenOrBearbeiten"
     action_path = f"/screenservices/SHPPOC/Popups/GespraechDokumentieren_Popup/Action{action_name}"
@@ -129,6 +156,15 @@ def gespraech_dokumentieren(self, gespraech_id, titel, beschreibung, datum):
 
 
 def aufgabe_status_aendern(self):
+    """
+    Changes the status of an existing task (Aufgabe).
+
+    This method sends a POST request to change the status of a task, providing
+    a randomly selected new status ID.
+
+    :param self: The HttpUser object
+    :return: None
+    """
     # set action specific values
     action_name = "AufgabeSetNextStep"
     action_path = f"/screenservices/SHPPOC/CW/AufgabenDetails/Action{action_name}"
@@ -151,6 +187,15 @@ def aufgabe_status_aendern(self):
 
 
 def aufgabe_sachbearbeiter_aendern(self):
+    """
+    Changes the assigned case worker (Sachbearbeiter) for a task.
+
+    This method selects a new case worker from a list of IDs and updates the
+    task with the new assigned user.
+
+    :param self: The HttpUser object
+    :return: None
+    """
     # set action specific values
     action_name = "ChangeAufgabeSB"
     action_path = f"/screenservices/SHPPOC/CW/AufgabenDetails/Action{action_name}"
@@ -173,6 +218,18 @@ def aufgabe_sachbearbeiter_aendern(self):
 
 
 def begleitung_dokumentieren(self, begleitung_id, beschreibung, datum):
+    """
+    Records or updates a "Begleitung" (accompaniment) entry in the system.
+
+    This function creates or modifies an accompaniment entry, potentially including
+    file uploads, and sends a POST request with the required data.
+
+    :param self: The HttpUser object
+    :param begleitung_id: The ID of the accompaniment entry
+    :param beschreibung: A detailed description of the accompaniment
+    :param datum: The date of the accompaniment
+    :return: None
+    """
     # set action specific values
     action_name = "Begleitung_ErfassenOrBearbeiten"
     action_path = f"/screenservices/SHPPOC/Popups/Begleitung_Popup/Action{action_name}"
@@ -206,6 +263,15 @@ def begleitung_dokumentieren(self, begleitung_id, beschreibung, datum):
 
 
 def fall_beenden(self):
+    """
+    Marks the case as completed and ends the current process.
+
+    This function sends a POST request to change the case status and then
+    reloads all necessary screen data for the process.
+
+    :param self: The HttpUser object
+    :return: None
+    """
     # set action specific values
     action_name = "FallChangeStatus"
     action_path = f"/screenservices/SHPPOC/Popups/FallBeenden_Popup/Action{action_name}"
@@ -231,6 +297,15 @@ def fall_beenden(self):
 
 
 def fall_sachbearbeiter_aendern(self):
+    """
+    Changes the assigned case worker (Sachbearbeiter) for a case.
+
+    This method selects a new case worker from a list of IDs and updates the
+    case with the new assigned user.
+
+    :param self: The HttpUser object
+    :return: None
+    """
     # set action specific values
     action_name = "ChangeFallSB"
     action_path = f"/screenservices/SHPPOC/MainFlow/FallDetail/Action{action_name}"
@@ -253,6 +328,15 @@ def fall_sachbearbeiter_aendern(self):
 
 
 def fall_bearbeitung_starten(self):
+    """
+    Starts the case processing workflow by changing the status of the case.
+
+    This function sends a POST request to update the case status to the "In Processing" state
+    and then reloads all necessary screen data for the process.
+
+    :param self: The HttpUser object
+    :return: None
+    """
     # set action specific values
     action_name = "FallChangeStatus"
     action_path = f"/screenservices/SHPPOC/CW/FallDetailsTabs/Action{action_name}"
@@ -278,6 +362,15 @@ def fall_bearbeitung_starten(self):
 
 
 def fall_bescheiden(self):
+    """
+    Issues a decision (Bescheid) for the case and generates a PDF document.
+
+    This function generates a decision document and sends a POST request to update
+    the case status with the generated document.
+
+    :param self: The HttpUser object
+    :return: None
+    """
     # set action specific values
     action_name = "FallBescheiden"
     action_path = f"/screenservices/SHPPOC/Popups/FallBescheiden_Popup/Action{action_name}"
@@ -303,6 +396,15 @@ def fall_bescheiden(self):
 
 
 def fall_abrechnen(self):
+    """
+    Finalizes the case by generating and processing the billing information.
+
+    This method generates a billing document and sends a POST request with
+    the case's relevant data, including the billing document.
+
+    :param self: The HttpUser object
+    :return: None
+    """
     # set action specific values
     action_name = "FallAbrechnen"
     action_path = f"/screenservices/SHPPOC/Popups/FallAbrechnen_Popup/Action{action_name}"
@@ -329,6 +431,15 @@ def fall_abrechnen(self):
 
 
 def fall_begleiten(self):
+    """
+    Changes the status of the case to "Accompanied" and reloads all necessary screen data.
+
+    This function sends a POST request to update the case status and then
+    reloads all necessary screen data for the process.
+
+    :param self: The HttpUser object
+    :return: None
+    """
     # set action specific values
     action_name = "FallChangeStatus"
     action_path = f"/screenservices/SHPPOC/MainFlow/FallDetail/Action{action_name}"
@@ -354,31 +465,68 @@ def fall_begleiten(self):
 
 
 def fall_als_pdf_exportieren(self):
-    # set action specific values
-    action_name = "AttachDocsToFall"
-    action_path = f"/screenservices/SHPPOC/MainFlow/FallDetail/Action{action_name}"
+    """
+    Exports case-related data as PDF documents.
 
-    with self.client.get(f"/scripts/{MODULE_NAME}.{UI_FLOW}.{SCREEN_NAME}.mvc.js", headers=self.client.headers,
-                         catch_response=True, name=f"/{SCREEN_NAME}_resources") as response:
-        payload = {
-            "versionInfo":
-                {"moduleVersion": self.client.module_version,
-                 "apiVersion": get_api_key_from_script(response.text, action_name, action_path[1:])
-                 },
-            "viewName": f"{UI_FLOW}.{SCREEN_NAME}",
-            "inputParameters": {
-                "FallId": self.client.fall_id,
-                "IstAntrag": False
+    This function sends POST requests to generate PDF documents for different
+    case-related data and then attaches these documents to the case.
+
+    :param self: The HttpUser object
+    :return: None
+    """
+    # we load all pdf data
+    pdf_script_sources = [
+        "PDF_CW.AnlagenList",
+        "PDF_CW.AufgabenList",
+        "PDF_CW.GespraechList",
+        "PDF_CW.BegleitungList",
+        "PDF_CW.AufgabeDetail",
+        "PDF_CW.GespraechDetail"
+    ]
+    for script in pdf_script_sources:
+        with self.client.get(f"/scripts/{MODULE_NAME}.{script}.mvc.js", headers=self.client.headers,
+                             catch_response=True, name=f"/{SCREEN_NAME}_resources") as response:
+
+            # Find all matches
+            matches = re.findall(DATA_ACTION_PATTERN, response.text)
+
+            # Print extracted values
+            for match in matches:
+                _, endpoint, endpoint_url, api_version = match
+                self.client.post("/" + endpoint_url, json=get_payload(self, api_version),
+                                 headers=self.client.headers, name=f"/{SCREEN_NAME}")
+
+        # set action specific values
+        action_name = "AttachDocsToFall"
+        action_path = f"/screenservices/SHPPOC/MainFlow/FallDetail/Action{action_name}"
+
+        with self.client.get(f"/scripts/{MODULE_NAME}.{UI_FLOW}.{SCREEN_NAME}.mvc.js", headers=self.client.headers,
+                             catch_response=True, name=f"/{SCREEN_NAME}_resources") as response:
+            payload = {
+                "versionInfo":
+                    {"moduleVersion": self.client.module_version,
+                     "apiVersion": get_api_key_from_script(response.text, action_name, action_path[1:])
+                     },
+                "viewName": f"{UI_FLOW}.{SCREEN_NAME}",
+                "inputParameters": {
+                    "FallId": self.client.fall_id,
+                    "IstAntrag": False
+                }
             }
-        }
 
-        self.client.post(action_path, json=payload, headers=self.client.headers, name=f"/{SCREEN_NAME}")
-
-    # we reload all screen data afterwards
-    load_data_actions(self)
+            self.client.post(action_path, json=payload, headers=self.client.headers, name=f"/{SCREEN_NAME}")
 
 
 def fall_anlagen_exportieren(self):
+    """
+    Exports case-related attachments as a ZIP file.
+
+    This method generates a ZIP file containing the case's attachments and
+    sends a POST request with the generated ZIP file.
+
+    :param self: The HttpUser object
+    :return: None
+    """
     # set action specific values
     action_name = "ZipDocsByFallId"
     action_path = f"/screenservices/SHPPOC/MainFlow/FallDetail/Action{action_name}"
@@ -401,6 +549,16 @@ def fall_anlagen_exportieren(self):
 
 
 def fall_weiterleiten(self, hinweis):
+    """
+    Forwards the case to another entity and attaches a note.
+
+    This function forwards the case and includes a note in the process, sending
+    a POST request with the relevant data.
+
+    :param self: The HttpUser object
+    :param hinweis: The note to attach when forwarding the case
+    :return: None
+    """
     # set action specific values
     action_name = "FallWeiterleiten"
     action_path = f"/screenservices/SHPPOC/Popups/EDIS_Popup/Action{action_name}"
