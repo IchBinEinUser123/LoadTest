@@ -49,6 +49,7 @@ def login_user(self):
     # Get Login API Version Info
     with self.client.get(f"/scripts/{MODULE_NAME}.{UI_FLOW}.{SCREEN_NAME}.mvc.js", headers=self.client.headers,
                          catch_response=True) as response:
+        print(response.text)
         api_version = get_api_key_from_script(response.text, LOGIN_ACTION_NAME, LOGIN_PATH[1:])
         logging.debug(api_version)
 

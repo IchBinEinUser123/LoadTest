@@ -22,6 +22,7 @@ class Sachbearbeiter(HttpUserWithResources):
     host = FQDN_WITH_PROTO + f"/{MODULE_NAME}"
     wait_time = between(MIN_WAIT_TIME, MAX_WAIT_TIME)
     fall_id = 0
+    aufgabe_id = 0
 
     @task(10)
     def visit_fall_details(self):
