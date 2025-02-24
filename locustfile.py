@@ -226,6 +226,8 @@ class Sachbearbeiter(HttpUserWithResources):
         """
         # login and set headers
         login_user(self)
+        self.client.fall_id = 0
+        self.client.aufgabe_id = 0
 
         # initialize relevant values, i.e. Sachbearbeiter list, FallId, AufgabeId
         self.visit_alle_faelle()
