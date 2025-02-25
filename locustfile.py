@@ -224,6 +224,7 @@ class Sachbearbeiter(HttpUserWithResources):
         :param self: The HttpUser object
         :return:
         """
+        self.client.verify = False
         # login and set headers
         login_user(self)
         self.client.fall_id = 0

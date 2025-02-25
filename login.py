@@ -32,7 +32,8 @@ def login_user(self):
     }
 
     # get module version
-    self.client.get("/Login")
+    response = self.client.get("/Login")
+    print(response.text)
     with self.client.get("/moduleservices/moduleversioninfo") as response:
         self.client.module_version = json.loads(response.text).get("versionToken")
         logging.debug("Module Version", self.client.module_version)
