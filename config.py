@@ -1,5 +1,5 @@
 # FQDN with protocol
-FQDN_WITH_PROTO = "REPLACE_ME"
+FQDN_WITH_PROTO = "https://live.aktienregister-online.de/"
 
 # module name
 MODULE_NAME = "SHPPOC"
